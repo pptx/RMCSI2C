@@ -1,0 +1,96 @@
+// --------------------------------------
+// i2c_scanner
+// Scan and then run the code
+// For two I2C devices
+#include <Wire.h>
+#include <Streaming.h>
+String motor1="0x", motor2="0x";
+
+void setup()
+{
+  Wire.begin();
+
+  Serial.begin(9600);
+  Serial.println("\nI2C Scanner");
+  scanner();
+}
+
+
+void loop()
+{
+
+}
+
+byte getVal(char c)
+{
+   if(c >= '0' && c <= '9')
+     return (byte)(c - '0');
+   else
+     return (byte)(c-'A'+10);
+}
+
+void scanner()
+{
+    byte error, address;
+  int nDevices;
+
+  Serial.println("Scanning...");
+
+  nDevices = 0;
+  for(address = 1; address < 127; address++ ) 
+  {
+    // The i2c_scanner uses the return value of
+    // the Write.endTransmisstion to see if
+    // a device did acknowledge to the address.
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0)
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address<16) 
+        {
+          Serial.print("0");
+        }
+      Serial.print(address,HEX);
+      Serial.println("  !");
+      
+      nDevices++;
+      
+      //address = String(13, HEX)
+      //hexadecimal[address%16]
+      //Serial<< _HEX('A');
+      String address_ =  String(address, HEX);
+      if (nDevices == 1)
+      {
+        if (address<10)
+        {
+          motor1.concat("0");
+        }
+        motor1.concat(address_);
+      }
+      if (nDevices == 2)
+      {
+        if (address<10)
+        {
+          motor1.concat("0");
+        }
+        motor2.concat(address_);
+      }
+    }
+    else if (error==4) 
+    {
+      Serial.print("Unknown error at address 0x");
+      if (address<16) 
+        Serial.print("0");
+      Serial.println(address,HEX);
+    }    
+  }
+  if (nDevices == 0)
+    Serial.println("No I2C devices found\n");
+  else
+    Serial.println("done\n");
+    
+    Serial.println(motor1);
+    Serial.println(motor2);
+}
