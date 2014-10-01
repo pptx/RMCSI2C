@@ -1,0 +1,24 @@
+void setup()
+{
+  Serial.begin(9600);
+  Serial2.begin(9600);
+  Serial2.println("Y");
+}
+
+void loop()
+{
+///////////////////////////////////////////////
+// Code for motor rotation
+  Serial2.println("R1000"); 
+ delay(2000) ; 
+    Serial2.println("R-1000");
+    delay(2000);
+   Serial.println("both done"); 
+//////////////////////////////////////////////////
+
+
+// This part changes the code for I2C access
+Serial2.write("E3");
+  ////////////////////////////////////////////////
+}
+
