@@ -18,6 +18,7 @@ void loop()
 
 
 // This part changes the code for I2C access
+// New address in Hex
 Serial2.write("E3");
   ////////////////////////////////////////////////
 }
